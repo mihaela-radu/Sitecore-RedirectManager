@@ -92,7 +92,13 @@ namespace Sitecore.SharedSource.RedirectManager.Templates
     {
       get
       {
-        return this.redirectCode == 0 ? (this.redirectCode = MainUtil.GetInt(this.InnerItem.Fields["Redirect Code"], Configuration.RedirectStatusCode)) : this.redirectCode;
+          var rCode = Configuration.RedirectStatusCode;
+          if (this.InnerItem != null && this.InnerItem.Fields["Redirect Code"] != null)
+          {
+              if (!int.TryParse(this.InnerItem.Fields["Redirect Code"].Value, out rCode))
+                  rCode = Configuration.RedirectStatusCode;
+          }
+          return this.redirectCode == 0 ? (this.redirectCode = rCode) : this.redirectCode;
       }
     }
 
